@@ -8,6 +8,9 @@
 --   /aca bags   - collect the appearance of every eligible item in your bags
 --
 -- On login the addon creates a per-character macro "CollectLooks" (/aca bags).
+--
+-- Note: collecting an appearance SOULBINDS the item (that is what the
+-- confirmation popup warns about); the item is not consumed.
 
 local TOKEN = "CONFIRM_COLLECT_APPEARANCE"
 local MACRO_NAME = "CollectLooks"
@@ -62,7 +65,7 @@ end)
 -- Sweep bags 0-4 and collect every uncollected appearance.
 -- The collect call takes the bag item's GUID string (same payload the
 -- CONFIRM_COLLECT_APPEARANCE popup's OnAccept receives), NOT the itemID.
--- WARNING: collecting consumes the item.
+-- WARNING: collecting soulbinds the item.
 local function CollectBags()
     if not (C_Appearance and C_AppearanceCollection and GetContainerItemGUID
             and C_Appearance.GetItemAppearanceID

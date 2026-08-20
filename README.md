@@ -22,8 +22,8 @@ Enable it in the AddOns list at the character select screen.
 - `/aca bags` sweeps bags 0-4 and collects the appearance of every item whose look you don't own yet.
 - On first login the addon creates a per-character macro **CollectLooks** (body: `/aca bags`) — drag it to a bar for one-click bag sweeps.
 
-## Warning
+## Note
 
-Collecting an appearance consumes the item. This addon removes the confirmation safety net,
-and `/aca bags` will consume **every** bag item with an uncollected look — including gear you
-might still want to wear or sell. Only use it while intentionally farming transmog.
+Collecting an appearance **soulbinds** the item (that's what the confirmation popup warns about) —
+the item is not consumed. This addon skips that confirmation, and `/aca bags` will bind **every**
+bag item with an uncollected look, so items you meant to sell or trade will become soulbound.
