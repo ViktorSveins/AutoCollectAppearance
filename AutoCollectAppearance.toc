@@ -1,6 +1,6 @@
 ## Interface: 30300
 ## Title: AutoCollectAppearance
-## Notes: Auto-accepts the CONFIRM_COLLECT_APPEARANCE popup when ctrl-alt-clicking gear to collect its transmog appearance.
+## Notes: Auto-accepts the collect-appearance popup. /aca, /aca bags
 ## Version: 1.0
 
 AutoCollectAppearance.lua

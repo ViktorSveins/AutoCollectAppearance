@@ -1,16 +1,6 @@
--- AutoCollectAppearance
--- Auto-accepts the Ascension "collect appearance" confirmation popup
--- (shown when ctrl-alt-clicking an item to add its look to your collection),
--- and provides a bag sweep that collects every uncollected appearance.
---
--- Commands:
---   /aca        - toggle auto-accept on/off
---   /aca bags   - collect the appearance of every eligible item in your bags
---
--- On login the addon creates a per-character macro "CollectLooks" (/aca bags).
---
--- Note: collecting an appearance SOULBINDS the item (that is what the
--- confirmation popup warns about); the item is not consumed.
+-- AutoCollectAppearance: auto-accepts the "collect appearance" popup and
+-- sweeps bags for uncollected looks.
+-- /aca (toggle), /aca bags, /aca probe
 
 local TOKEN = "CONFIRM_COLLECT_APPEARANCE"
 local MACRO_NAME = "CollectLooks"
@@ -33,7 +23,6 @@ local function DumpVal(v, depth)
     return tostring(v)
 end
 
--- Auto-accept the confirmation popup
 hooksecurefunc("StaticPopup_Show", function(which)
     if which ~= TOKEN then return end
     local frame = StaticPopup_Visible(TOKEN)
@@ -52,7 +41,7 @@ hooksecurefunc("StaticPopup_Show", function(which)
             table.sort(keys)
             Print("PROBE dialog fields: " .. table.concat(keys, ", "))
         end
-        Print("probe done - popup left open, accept or cancel it manually.")
+        Print("probe done; popup left open.")
         return
     end
     if not enabled then return end
@@ -62,10 +51,8 @@ hooksecurefunc("StaticPopup_Show", function(which)
     end
 end)
 
--- Sweep bags 0-4 and collect every uncollected appearance.
--- The collect call takes the bag item's GUID string (same payload the
--- CONFIRM_COLLECT_APPEARANCE popup's OnAccept receives), NOT the itemID.
--- WARNING: collecting soulbinds the item.
+-- CollectItemAppearance takes the container item's GUID string, not the itemID.
+-- Collecting soulbinds the item.
 local function CollectBags()
     if not (C_Appearance and C_AppearanceCollection and GetContainerItemGUID
             and C_Appearance.GetItemAppearanceID
@@ -95,16 +82,15 @@ local function CollectBags()
     Print(collected .. " new appearance(s) collected.")
 end
 
--- Create the per-character macro once
 local loader = CreateFrame("Frame")
 loader:RegisterEvent("PLAYER_LOGIN")
 loader:SetScript("OnEvent", function()
     if GetMacroIndexByName(MACRO_NAME) == 0 then
         local ok = pcall(CreateMacro, MACRO_NAME, 1, "/aca bags", 1)
         if ok then
-            Print("created macro '" .. MACRO_NAME .. "' (/aca bags). Find it in the per-character macro tab.")
+            Print("created macro '" .. MACRO_NAME .. "' (/aca bags).")
         else
-            Print("could not create macro '" .. MACRO_NAME .. "' (macro slots full?). Make one yourself with body: /aca bags")
+            Print("could not create macro '" .. MACRO_NAME .. "'; make one with: /aca bags")
         end
     end
 end)
@@ -116,7 +102,7 @@ SlashCmdList["AUTOCOLLECTAPPEARANCE"] = function(msg)
         CollectBags()
     elseif msg == "probe" then
         probing = true
-        Print("probe armed - now ctrl-alt-click ONE item and paste the PROBE lines back.")
+        Print("probe armed; ctrl-alt-click one item.")
     else
         enabled = not enabled
         Print("auto-accept " .. (enabled and "|cff00ff00enabled|r" or "|cffff0000disabled|r"))
